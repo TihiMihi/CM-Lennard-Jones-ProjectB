@@ -4,19 +4,19 @@ Created on Tue Jan 25 14:15:28 2022
 
 @author: Tihana Stefanic
 
-# The Lennard Jones Potential on Argon particles
+<h1> The Lennard Jones Potential on Argon particles </h1>
 
-## Project B: Lennard Jones simulation of Argon
+<h2> Project B: Lennard Jones simulation of Argon
 particles using velocity Verlet time integration 
-of a particle moving in a double well potential.
+of a particle moving in a double well potential. </h2>
 
-## Produces trajectory file of N particles interacting
+<h3> Produces trajectory file of N particles interacting
 via the Lennard Jones potential at given density
-and temperature
+and temperature. </h3>
 
-## Produces plots of the energies of the system
+<h4> Produces plots of the energies of the system
 and the mean distribution function as functions
-of time and the average radian distribution function
+of time and the average radian distribution function. </h4>
 
 """
 
