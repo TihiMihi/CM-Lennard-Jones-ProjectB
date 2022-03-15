@@ -44,3 +44,21 @@ default values for a solid
 Main asks for trajectory file name user input
 which is also automated to name file as
 'output.xyz' in the case of no user input
+
+
+### Units
+
+Distances in units of sigma, where sigma is
+the size of the particle
+
+Mass in units such that the mass of a particle is 1
+
+Energy in units of epsilon, where epsilon
+is the dispersion energy, also quantifies
+the depth of the potential well
+
+Temperature in units of epsilon i.e. in terms of
+the Boltzman constant
+
+Time in units of the ratio of unitary mass
+to epsilon square rooted times sigma
