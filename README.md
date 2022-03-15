@@ -49,10 +49,10 @@ particle system at a time instance
 ***Energy file***: kinetic, potential, and
 total energy of particle system at a time instance
 
-***MSD file*** mean squared displacement of
+***MSD file***: mean squared displacement of
 particle system at a time instance from time zero
 
-***RDF file*** radial distribution function
+***RDF file***: radial distribution function
 averaged across all timesteps in simulation
 
 ### Units
