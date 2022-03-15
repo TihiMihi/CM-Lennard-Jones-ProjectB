@@ -42,7 +42,7 @@ which is also automated to name file as
 
 ### Format
 
-#### Output files
+#### Output files:
 ***Trajectory file***: label and positions of
 particle system at a time instance
 
