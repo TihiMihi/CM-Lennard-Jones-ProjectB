@@ -18,3 +18,10 @@ and temperature.
 Produces plots of the energies of the system
 and the mean distribution as functions of time
 and the average radial distribution function. 
+
+### Instructions
+
+*bold*
+**italic**
+***bold and italic***
+'this is code'
