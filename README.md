@@ -21,11 +21,6 @@ and the average radial distribution function.
 
 ### Instructions
 
-*bold*
-**italic**
-***bold and italic***
-'this is code'
-
 Main asks for physical state user input of
 particle system as shortcut to define **number
 of particles**, **density**, and **temperature**
@@ -45,6 +40,20 @@ Main asks for trajectory file name user input
 which is also automated to name file as
 'output.xyz' in the case of no user input
 
+### Format
+
+#### Output files
+***Trajectory file***: label and positions of
+particle system at a time instance
+
+***Energy file***: kinetic, potential, and
+total energy of particle system at a time instance
+
+***MSD file*** mean squared displacement of
+particle system at a time instance from time zero
+
+***RDF file*** radial distribution function
+averaged across all timesteps in simulation
 
 ### Units
 
@@ -61,4 +70,4 @@ Temperature in units of epsilon i.e. in terms of
 the Boltzman constant
 
 Time in units of the ratio of unitary mass
-to epsilon square rooted times sigma
+to epsilon all square rooted times sigma
