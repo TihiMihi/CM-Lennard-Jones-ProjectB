@@ -311,16 +311,41 @@ def main():
         list of total energy floats
     """
     
-    # System parameters with user input
-    # and default values for Argon solid
-    N = int(input("Number of particles:") or "32")
-    print(f"N = {N}") #no of particles
-    
-    rho = float(input("Density in mass/(sigma^3):") or "1")
-    print(f"ρ = {rho}") # density in terms of unitary mass per volume of particle
-    
-    temp = float(input("Temperature in terms of kB (energy):") or "0.1")
-    print(f"T = {temp}") # temperature in terms of dispersion energy E
+    # System state with user input
+    # and default values for Argon
+    # solid, liquid, and gas
+    state = input("Physical state (solid/liquid/gas):")
+    if state == "solid":
+        N = 32
+        rho = 1
+        temp = 0.1
+        print(f"N = {N} \nρ = {rho} \nT = {temp}")
+        
+    elif state == "liquid":
+        N = 30
+        rho = 0.6
+        temp = 0.4
+        print(f"N = {N} \nρ = {rho} \nT = {temp}")
+        
+    elif state == "gas":
+        N = 30
+        rho = 0.1
+        temp = 1
+        print(f"N = {N} \nρ = {rho} \nT = {temp}")
+        
+    else:
+        print("Specify parameters:\n Default values for Argon solid")
+        
+        # System parameters with user input
+        # and default values for Argon solid
+        N = int(input("Number of particles:") or "32")
+        print(f"N = {N}") #no of particles
+        
+        rho = float(input("Density in mass/(sigma^3):") or "1")
+        print(f"ρ = {rho}") # density in terms of unitary mass per volume of particle
+        
+        temp = float(input("Temperature in terms of kB (energy):") or "0.1")
+        print(f"T = {temp}") # temperature in terms of dispersion energy E
     
     
     # initialize particle list
