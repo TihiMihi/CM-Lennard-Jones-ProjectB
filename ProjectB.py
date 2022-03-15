@@ -334,7 +334,7 @@ def main():
         print(f"N = {N} \nρ = {rho} \nT = {temp}")
         
     else:
-        print("Specify parameters:\n Default values for Argon solid")
+        print("Specify parameters:\nDefault values are for Argon solid")
         
         # System parameters with user input
         # and default values for Argon solid
@@ -492,7 +492,7 @@ def main():
     # Plot Radial Distribution Function as a function of distance
     pyplot.title('Lennard Jones: Radial Distribution Function vs distance')
     pyplot.xlabel('Distance (sigma)') # sigma = size of the particle, m = unitary mass, E = dispersion energy
-    pyplot.ylabel('Radial Distribution Function') # epsilon = classical binding energy # depth of potential well
+    pyplot.ylabel('Radial Distribution Function') # E = dispersion / classical binding energy
     pyplot.plot(r, gr)
     pyplot.show()
     
