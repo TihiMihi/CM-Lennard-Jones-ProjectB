@@ -456,8 +456,8 @@ def main():
     # Output energy data
     kinetic_energy, potential_energy, energy = total_energies(particle_list, cell_size, separation, energy_file)
     
-    # Measure radial distribution of
-    # system to output to rdf file
+    # Measure average radial distribution of
+    # system using separations and output to rdf file
     rdf_file = open("RDF.dat", "w")
     rdf_file.write("Time / Radial Distribution Function\n")
     r, gr = RDF(N, separation_list, rho, numstep, rdf_file)
