@@ -358,13 +358,10 @@ def main():
     set_initial_velocities(temp, particle_list)
     
     
-    # print and store initial particle positions
-    print("Initial particle positions:")
-    
+    # store initial particle positions
     initial_positions = np.empty(1)
     for particle in particle_list:
         np.append(initial_positions, particle.pos)
-        print(particle)
     
     
     # Simulation parameters with user input
