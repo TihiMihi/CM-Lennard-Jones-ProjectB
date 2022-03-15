@@ -7,19 +7,20 @@ Created on Tue Jan 25 14:15:28 2022
 <h1> The Lennard Jones Potential on Argon particles </h1>
 
 <h2> Project B: Lennard Jones simulation of Argon
-particles using velocity Verlet time integration 
-of a particle moving in a double well potential. </h2>
+particles moving in a double well potential using
+a velocity Verlet time integration. </h2>
 
 <h3> Produces trajectory file of N particles interacting
-via the Lennard Jones potential at given density
+via the Lennard Jones potential at a given density
 and temperature. </h3>
 
 <h4> Produces plots of the energies of the system
-and the mean distribution function as functions
-of time and the average radian distribution function. </h4>
+and the mean distribution as functions of time
+and the average radial distribution function. </h4>
 
 """
 
+# import directories
 import numpy as np
 import matplotlib.pyplot as pyplot
 from particle3D import Particle3D
@@ -29,7 +30,8 @@ from mdutilities_20210131 import set_initial_velocities
 
 def mic_separation(particle_list, cell_size):
     """
-    Minimum Image Convention separation of particles
+    Method to return the Minimum Image Convention
+    of the separation of particles
 
     Parameters
     ----------
@@ -57,8 +59,8 @@ def mic_separation(particle_list, cell_size):
 
 def new_force(particle_list, separation):
     """
-    Method to return force between particles
-    interacting via Lennard Jones potential
+    Method to return forces for particle system
+    interacting via the Lennard Jones potential
     
     Force is given by:
     F(r) = 48 * (1/r^14 - 1/2r^8)(r2-r1)
@@ -96,8 +98,8 @@ def new_force(particle_list, separation):
 
 def new_potential(particle_list, separation):
     """
-    Method to return potential energy between
-    particles interacting via Lennard Jones potential
+    Method to return potential energy sum for particle
+    system interacting via the Lennard Jones potential
     
     Potential is given by:
     V(r) = 4 * ((1/r^12 - 1/r^6)
@@ -135,7 +137,6 @@ def xyz_trajectory(particle_list, file_handle):
     """
     Method to output label and positions
     of particle3D instances in list
-    :param file_handle: file handle
 
     Parameters
     ----------
@@ -156,8 +157,8 @@ def xyz_trajectory(particle_list, file_handle):
 
 def total_energies(particle_list, cell_size, separation, file_handle):
     """
-    Method to kinetic, potential,
-    and total energy of system
+    Method to return kinetic, potential,
+    and total energy of the system
     
     Parameters
     ----------
@@ -196,6 +197,9 @@ def total_energies(particle_list, cell_size, separation, file_handle):
 
 def MSD(particle_list, cell_size, initial_pos_list, time_list, iterator, file_handle):
     """
+    Method to return the mean squared displacement
+    for all particles at a given time in the simulation
+    
     Parameters
     ----------
     particle_list : list of 
@@ -229,11 +233,16 @@ def MSD(particle_list, cell_size, initial_pos_list, time_list, iterator, file_ha
         msd = np.sum(delta_pos**2) / N
             
         file_handle.write(f"{time_list[-1]} {msd}\n")
-    
-        return msd # return msd for only selection of time intervals
+        
+        # return msd only for selection
+        # of time intervals
+        return msd
 
 def RDF(N, separation_list, rho, numstep, file_handle):
     """
+    Method to return the radial distribution function
+    as a function of particle displacement
+    averaged across all timesteps
     
     Parameters
     ----------
@@ -247,7 +256,7 @@ def RDF(N, separation_list, rho, numstep, file_handle):
     Returns
     -------
     r : histogram edge
-        distances
+        midpoint distances
     gr : averaged weighted
         rdf histogram
     
@@ -256,25 +265,22 @@ def RDF(N, separation_list, rho, numstep, file_handle):
     
     for separation in separation_list:
         r_mod = np.linalg.norm(separation, axis = -1)
-        counts, edges = np.histogram(r_mod, bins=100, range=(0,2))
+        counts, edges = np.histogram(r_mod, bins=100, range=(0,2), weights=(4*np.pi*rho*N)*r_mod)
         histogram_sum += counts
     
-    # time average of histograms
-    avg_count = histogram_sum/numstep
-    dr = edges[1]-edges[0]
-    
     # list of edges excluding final edge
-    # with first value annuelled
+    # with first value annulled
+    dr = edges[1]-edges[0]
     r = edges[1:-1] + 0.5*dr
     
-    # weighting
-    rho_0 = 4*np.pi*rho*(r**2)*dr
-    
     # average radial distribution
-    gr = avg_count[1:]/(rho_0*N)
+    # with first value annulled
+    gr = histogram_sum[1:]/(numstep*r**2)
     
     file_handle.write(f"{r} \n{gr} \n")
-        
+    
+    # return histogram edge midpoints
+    # with the averaged rdf
     return r, gr
 
 # Begin main code
@@ -296,13 +302,13 @@ def main():
     Plot total energy of the system overtime
     Plot MSD per time
     Plot RDF per distance
-
+    
     Returns
     -------
     time_list : list
         list of time increment floats
     energy_list : list
-        list of total energy of system in simulation
+        list of total energy floats
     """
     
     # System parameters with user input
@@ -358,7 +364,6 @@ def main():
     # to output to energy file
     energy_file = open("energies.dat", "w")
     energy_file.write("Energies of the system")
-    # energy in terms of the dispersion energy E i.e. depth of potential well
     kinetic_energy, potential_energy, energy = total_energies(particle_list, cell_size, separation, energy_file)
 
     # Initialise data lists for plotting total & potential energy later
