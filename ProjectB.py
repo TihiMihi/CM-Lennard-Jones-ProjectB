@@ -224,17 +224,18 @@ def MSD(particle_list, cell_size, initial_pos_list, time_list, iterator, file_ha
     msd = 0
 
     if len(time_list) == iterator:
-        # run msd only for selesction of
-        # timesteps where time == time_list[iterator]
+        # run msd only for selection of timesteps
+        # where the time == time_list[iterator]
         
         for i in range(N):
+            # apply mic to the average displacement over all particles
             delta_pos = mic(particle_list[i].pos - initial_pos_list[i], cell_size)
             msd += (delta_pos**2) / N
                 
         file_handle.write(f"{time_list[-1]} {msd}\n")
             
         # return msd for selection
-        # of time intervals
+        # of regular time intervals
         return np.linalg.norm(msd)
 
 def RDF(N, separation_list, rho, numstep, file_handle):
