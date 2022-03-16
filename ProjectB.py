@@ -408,7 +408,7 @@ def main():
     msd_file.write("Time / Mean Square displacement\n")
     msd = MSD(particle_list, cell_size, initial_positions, time_list, len(time_list), msd_file)
     msd_list = [msd]
-    
+    msd_tlist = [time]
     
     for step in range(numstep):
         # Start the time integration loop
@@ -453,11 +453,11 @@ def main():
         
         # Compute MSD of system every 10
         # timesteps and store in list
-        msd_tlist = np.arange(1, numstep, 10)
-        for i in msd_tlist:
+        for i in np.arange(1, numstep, 10):
             if i == len(time_list):
                 msd = MSD(particle_list, cell_size, initial_positions, time_list, len(time_list), msd_file)
                 msd_list.append(msd)
+                msd_tlist.append(time)
     
     # Output energy data
     kinetic_energy, potential_energy, energy = total_energies(particle_list, cell_size, separation, energy_file)
@@ -499,7 +499,7 @@ def main():
     pyplot.title('Lennard Jones: Mean Square Displacement vs time')
     pyplot.xlabel('Time (sigma√(m/E)') # sigma, m = unitary mass, E = dispersion energy
     pyplot.ylabel('MSD (sigma)') # sigma = size of the particle
-    pyplot.plot(msd_tlist*dt, msd_list)
+    pyplot.plot(msd_tlist, msd_list)
     pyplot.show()
     
     # Plot Radial Distribution Function
