@@ -133,7 +133,7 @@ def new_potential(particle_list, separation):
             
     return potential_new
 
-def xyz_trajectory(particle_list, file_handle):
+def xyz_trajectory(particle_list, timestep, file_handle):
     """
     Method to output label and positions
     of particle3D instances in list
@@ -150,7 +150,7 @@ def xyz_trajectory(particle_list, file_handle):
     """
     
     file_handle.write(str(len(particle_list)))
-    file_handle.write(f"\nComment line\n")
+    file_handle.write(f"\nPoint = {timestep}\n")
     
     for particle in particle_list:    
         file_handle.write(str(particle) +"\n")
@@ -318,7 +318,7 @@ def main():
     # System state with user input
     # and default values for Argon
     # solid, liquid, and gas
-    state = input("Physical state (solid/liquid/gas): ")
+    state = input("Default parameters for solid/liquid/gas\nPick physical state (solid/liquid/gas/none): ")
     if state == "solid":
         N = 32
         rho = 1
@@ -370,10 +370,10 @@ def main():
     
     # Simulation parameters with user input
     # and default values for Argon solid
-    dt = float(input("Timestep:") or "0.01")
+    dt = float(input("Timestep: ") or "0.01")
     print(f"dt = {dt}")
     
-    numstep = int(input("Number of steps:") or "1000")
+    numstep = int(input("Number of steps: ") or "1000")
     print(f"Steps = {numstep}")
     
     time = 0
@@ -386,10 +386,19 @@ def main():
     # Measure force
     force = new_force(particle_list, separation)
     
+    # User input and default
+    # file name for output file
+    # used as base for all files
+    file_name = input("Base name for files: ") or "output"
+    
+    # Output initial particle list to XYZ trajectory file
+    trajectory_file = open(f"{file_name}.trajectory.xyz", "w")
+    xyz_trajectory(particle_list, time/dt, trajectory_file)
+    
     # Measure energy data
     # to output to energy file
-    energy_file = open("energies.dat", "w")
-    energy_file.write("Energies of the system")
+    energy_file = open(f"{file_name}.energies.dat", "w")
+    energy_file.write("Energies of the system\n")
     kinetic_energy, potential_energy, energy = total_energies(particle_list, cell_size, separation, energy_file)
 
     # Initialise data lists for plotting total & potential energy later
@@ -398,13 +407,9 @@ def main():
     pot_list = [potential_energy]
     kin_list = [kinetic_energy]
     
-    # Output initial particle list to XYZ trajectory file
-    trajectory_file = open(input("Trajectory file:") or "output.xyz", "w")
-    xyz_trajectory(particle_list, trajectory_file)
-    
     # Measure MSD of system as a function of time
     # to output to MSD file
-    msd_file = open("MSD.dat", "w")
+    msd_file = open(f"{file_name}.msd.dat", "w")
     msd_file.write("Time / Mean Square displacement\n")
     msd = MSD(particle_list, cell_size, initial_positions, time_list, len(time_list), msd_file)
     msd_list = [msd]
@@ -449,7 +454,7 @@ def main():
         kin_list.append(kinetic_energy)
         
         # Output particle list to XYZ trajectory file
-        xyz_trajectory(particle_list, trajectory_file)
+        xyz_trajectory(particle_list, time/dt, trajectory_file)
         
         # Compute MSD of system every 10
         # timesteps and store in list
@@ -461,7 +466,7 @@ def main():
     
     # Measure average radial distribution of
     # system using separations and output to rdf file
-    rdf_file = open("RDF.dat", "w")
+    rdf_file = open(f"{file_name}.rdf.dat", "w")
     rdf_file.write("Time / Radial Distribution Function\n")
     r, gr = RDF(N, separation_list, rho, numstep, rdf_file)
     
