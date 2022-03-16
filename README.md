@@ -3,8 +3,6 @@ Lennard Jones simulation
 
 Created on Tue Jan 25 14:15:28 2022
 
-@author: Tihana Stefanic
-
 ## The Lennard Jones Potential on Argon particles 
 
 Project B: Lennard Jones simulation of Argon
