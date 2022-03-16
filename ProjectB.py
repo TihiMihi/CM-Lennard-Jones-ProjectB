@@ -459,9 +459,6 @@ def main():
                 msd_list.append(msd)
                 msd_tlist.append(time)
     
-    # Output energy data
-    kinetic_energy, potential_energy, energy = total_energies(particle_list, cell_size, separation, energy_file)
-    
     # Measure average radial distribution of
     # system using separations and output to rdf file
     rdf_file = open("RDF.dat", "w")
