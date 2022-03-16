@@ -36,11 +36,19 @@ Code automated to work with no user input for
 the physical state or system parameters with
 default values for a solid
 
-Main asks for trajectory file name user input
-which is also automated to name file as
-'output.xyz' in the case of no user input
+Main asks for a base file name user input to make
+the output file names which is automated to construct 
+file names using 'output' in case of no user input
 
 ### Format
+
+#### Input parameters:
+Number of particles
+Density
+Temperature
+Timestep
+Number of steps
+Output files base name
 
 #### Output files:
 ***Trajectory file***: label and positions of

@@ -142,6 +142,8 @@ def xyz_trajectory(particle_list, timestep, file_handle):
     ----------
     particle_list : list of 
         Particle3D instances
+    timestep : float of number of
+        steps in the trajectory
     file_handle : file handle
 
     Returns
@@ -191,7 +193,9 @@ def total_energies(particle_list, cell_size, separation, file_handle):
     PE += new_potential(particle_list, separation)
     total_energy += (KE + PE)
     
-    file_handle.write(f"\nKinetic energy: {KE}\nPotential energy: {PE}\nTotal energy:{total_energy}\n")
+    file_handle.write(f"\nKinetic energy: {KE}\n\
+                      Potential energy: {PE}\n\
+                      Total energy:{total_energy}\n")
     
     return KE, PE, total_energy
 
@@ -234,7 +238,7 @@ def MSD(particle_list, cell_size, initial_pos_list, time_list, iterator, file_ha
                 
         file_handle.write(f"{time_list[-1]} {msd}\n")
             
-        # return msd for selection
+        # return |msd| for selection
         # of regular time intervals
         return np.linalg.norm(msd)
 
@@ -269,7 +273,8 @@ def RDF(N, separation_list, rho, numstep, file_handle):
     
     for separation in separation_list:
         r_mod = np.linalg.norm(separation, axis = -1)
-        counts, edges = np.histogram(r_mod, bins=100, range=(0,2), weights=(4*np.pi*rho*N)*r_mod)
+        counts, edges = np.histogram(r_mod, bins=100, range=(0,2),\
+                                     weights=(4*np.pi*rho*N)*r_mod)
         histogram_sum += counts
     
     # list of edges excluding final edge
@@ -318,7 +323,9 @@ def main():
     # System state with user input
     # and default values for Argon
     # solid, liquid, and gas
-    state = input("Default parameters for solid/liquid/gas\nPick physical state (solid/liquid/gas/none): ")
+    state = input("Default parameters for solid/liquid/gas \
+                  \nPick physical state (solid/liquid/gas/none): ")
+                  
     if state == "solid":
         N = 32
         rho = 1
@@ -338,19 +345,20 @@ def main():
         print(f"N = {N} \nρ = {rho} \nT = {temp}")
         
     else:
-        print("Specify parameters:\nDefault values are for Argon solid")
+        print("Specify parameters: \
+              \n(Default values are for Argon solid)")
         
         # System parameters with user input
         # and default values for Argon solid
-        N = int(input("Number of particles:") or "32")
+        N = np.abs(int(input("Number of particles:") or "32"))
         print(f"N = {N}") #no of particles
         
-        rho = float(input("Density in mass/(sigma^3):") or "1")
-        print(f"ρ = {rho}") # density in terms of unitary mass per volume of particle
+        rho = np.abs(float(input("Density in mass/(sigma^3):") or "1"))
+        print(f"ρ = {rho}") # density in terms of unitary mass per particle volume
         
-        temp = float(input("Temperature in terms of kB (energy):") or "0.1")
+        temp = np.abs(float(input("Temperature in terms of kB (energy):") or "0.1"))
         print(f"T = {temp}") # temperature in terms of dispersion energy E
-    
+        # All parameters must be positive
     
     # initialize particle list
     particle_list = [Particle3D(f"p{ii+1}", 1.0, np.zeros(3), np.zeros(3)) 
@@ -390,6 +398,7 @@ def main():
     # file name for output file
     # used as base for all files
     file_name = input("Base name for files: ") or "output"
+    print(file_name)
     
     # Output initial particle list to XYZ trajectory file
     trajectory_file = open(f"{file_name}.trajectory.xyz", "w")
@@ -399,7 +408,8 @@ def main():
     # to output to energy file
     energy_file = open(f"{file_name}.energies.dat", "w")
     energy_file.write("Energies of the system\n")
-    kinetic_energy, potential_energy, energy = total_energies(particle_list, cell_size, separation, energy_file)
+    kinetic_energy, potential_energy, energy = \
+        total_energies(particle_list, cell_size, separation, energy_file)
 
     # Initialise data lists for plotting total & potential energy later
     time_list = [time]
@@ -445,7 +455,8 @@ def main():
         time += dt
         
         # Output energy data
-        kinetic_energy, potential_energy, energy = total_energies(particle_list, cell_size, separation, energy_file)
+        kinetic_energy, potential_energy, energy = \
+            total_energies(particle_list, cell_size, separation, energy_file)
         
         # Append information to data lists
         time_list.append(time)
@@ -469,6 +480,7 @@ def main():
     rdf_file = open(f"{file_name}.rdf.dat", "w")
     rdf_file.write("Time / Radial Distribution Function\n")
     r, gr = RDF(N, separation_list, rho, numstep, rdf_file)
+    
     
     # Close files
     energy_file.close()
