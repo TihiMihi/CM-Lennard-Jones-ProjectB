@@ -222,27 +222,30 @@ def MSD(particle_list, cell_size, initial_pos_list, time_list, iterator, file_ha
     """
     N = len(particle_list)
     msd = 0
-    time_pos_list = np.zeros((N,3))
-    
-    for i in range(N):
-        time_pos_list[i] = particle_list[i].pos
-    
-    if len(time_list) == iterator: # time == time_list[iterator]
+
+    if len(time_list) == iterator:
+        # run msd only for selesction of
+        # timesteps where time == time_list[iterator]
         
-        delta_pos = mic(time_pos_list - initial_pos_list, cell_size)
-        msd = np.sum(delta_pos**2) / N
-            
+        for i in range(N):
+            delta_pos = mic(particle_list[i].pos - initial_pos_list[i], cell_size)
+            msd += (delta_pos**2) / N
+                
         file_handle.write(f"{time_list[-1]} {msd}\n")
-        
-        # return msd only for selection
+            
+        # return msd for selection
         # of time intervals
-        return msd
+        return np.linalg.norm(msd)
 
 def RDF(N, separation_list, rho, numstep, file_handle):
     """
     Method to return the radial distribution function
     as a function of particle displacement
     averaged across all timesteps
+    
+    Radial distribution histogram is plotted without
+    the first value to allow the system to settle
+    down to equilibrium
     
     Parameters
     ----------
@@ -269,13 +272,13 @@ def RDF(N, separation_list, rho, numstep, file_handle):
         histogram_sum += counts
     
     # list of edges excluding final edge
-    # with first value annulled
+    # with first r value annulled
     dr = edges[1]-edges[0]
     r = edges[1:-1] + 0.5*dr
     
     # average radial distribution
-    # with first value annulled
-    gr = histogram_sum[1:]/(numstep*r**2)
+    # with first gr value annulled
+    gr = histogram_sum[1:]/(numstep*(r**2))
     
     file_handle.write(f"{r} \n{gr} \n")
     
@@ -314,7 +317,7 @@ def main():
     # System state with user input
     # and default values for Argon
     # solid, liquid, and gas
-    state = input("Physical state (solid/liquid/gas):")
+    state = input("Physical state (solid/liquid/gas): ")
     if state == "solid":
         N = 32
         rho = 1
@@ -359,7 +362,7 @@ def main():
     
     
     # store initial particle positions
-    initial_positions = np.empty(1)
+    initial_positions = np.empty(N)
     for particle in particle_list:
         np.append(initial_positions, particle.pos)
     
@@ -392,6 +395,7 @@ def main():
     time_list = [time]
     energy_list = [energy]
     pot_list = [potential_energy]
+    kin_list = [kinetic_energy]
     
     # Output initial particle list to XYZ trajectory file
     trajectory_file = open(input("Trajectory file:") or "output.xyz", "w")
@@ -441,12 +445,13 @@ def main():
         time_list.append(time)
         energy_list.append(energy)
         pot_list.append(potential_energy)
+        kin_list.append(kinetic_energy)
         
         # Output particle list to XYZ trajectory file
         xyz_trajectory(particle_list, trajectory_file)
         
-        # Compute MSD of system in several
-        # time intervals and store in list
+        # Compute MSD of system every 10
+        # timesteps and store in list
         msd_tlist = np.arange(1, numstep, 10)
         for i in msd_tlist:
             if i == len(time_list):
@@ -475,6 +480,13 @@ def main():
     pyplot.plot(time_list, pot_list)
     pyplot.show()
     
+    # Plot kinetic energy
+    pyplot.title('Lennard Jones: kinetic energy vs time')
+    pyplot.xlabel('Time (sigma√(m/E)') # sigma = size of the particle, m = unitary mass, E
+    pyplot.ylabel('Kinetic Energy (dispersion energy E)') # E = dispersion / classical binding energy
+    pyplot.plot(time_list, kin_list)
+    pyplot.show()
+    
     # Plot total energy
     pyplot.title('Lennard Jones: total energy vs time')
     pyplot.xlabel('Time (sigma√(m/E)') # sigma = size of the particle, m = unitary mass, E
@@ -486,10 +498,10 @@ def main():
     pyplot.title('Lennard Jones: Mean Square Displacement vs time')
     pyplot.xlabel('Time (sigma√(m/E)') # sigma, m = unitary mass, E = dispersion energy
     pyplot.ylabel('MSD (sigma)') # sigma = size of the particle
-    pyplot.plot(msd_tlist, msd_list)
+    pyplot.plot(msd_tlist*dt, msd_list)
     pyplot.show()
     
-    # Plot Radial Distribution Function as a function of distance
+    # Plot Radial Distribution Function
     pyplot.title('Lennard Jones: Radial Distribution Function vs distance')
     pyplot.xlabel('Distance (sigma)') # sigma = size of the particle, m = unitary mass, E = dispersion energy
     pyplot.ylabel('Radial Distribution Function') # E = dispersion / classical binding energy
