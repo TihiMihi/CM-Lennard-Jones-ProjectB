@@ -40,6 +40,13 @@ file names using 'output' in case of no user input
 
 ### Format
 
+#### Imported libraries
+numpy
+matplotlib.pyplot
+particle3D
+PBC
+mdutilities_20210131
+
 #### Input parameters:
 Number of particles
 Density
