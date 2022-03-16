@@ -355,10 +355,11 @@ def main():
         
         rho = np.abs(float(input("Density in mass/(sigma^3):") or "1"))
         print(f"ρ = {rho}") # density in terms of unitary mass per particle volume
+        # N and ρ parameters must be positive
         
-        temp = np.abs(float(input("Temperature in terms of kB (energy):") or "0.1"))
+        temp = (float(input("Temperature in terms of kB (energy):") or "0.1"))
         print(f"T = {temp}") # temperature in terms of dispersion energy E
-        # All parameters must be positive
+        
     
     # initialize particle list
     particle_list = [Particle3D(f"p{ii+1}", 1.0, np.zeros(3), np.zeros(3)) 
@@ -378,11 +379,12 @@ def main():
     
     # Simulation parameters with user input
     # and default values for Argon solid
-    dt = float(input("Timestep: ") or "0.01")
+    dt = np.abs(float(input("Timestep: ") or "0.01"))
     print(f"dt = {dt}")
     
-    numstep = int(input("Number of steps: ") or "1000")
+    numstep = np.abs(int(input("Number of steps: ") or "1000"))
     print(f"Steps = {numstep}")
+    # dt and numstep parameters must be positive
     
     time = 0
     
