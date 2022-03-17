@@ -1,42 +1,32 @@
 # CM-Lennard-Jones-ProjectB
 Lennard Jones simulation
-
 Created on Tue Jan 25 14:15:28 2022
 
 ## The Lennard Jones Potential on Argon particles 
 
-Project B: Lennard Jones simulation of Argon
-particles moving in a double well potential using
-a velocity Verlet time integration.
-
-Produces trajectory file of N particles interacting
-via the Lennard Jones potential at a given density
-and temperature.
-
-Produces plots of the energies of the system
-and the mean distribution as functions of time
-and the average radial distribution function. 
-
 ### Instructions
 
 Main asks for physical state user input of
-particle system as shortcut to define **number
-of particles**, **density**, and **temperature**
-
+particle system as a shortcut to define **number
+of particles**, **density**, and **temperature**.
 In the case of no user input or input which
 does not correspond to 'solid' 'liquid' or 'gas',
-main asks for manual input of system parameters
+main asks for manual input of system parameters.
 
-Main asks for **timestep** and **number of steps**
-user input
+I.e. Type 'solid', 'liquid', or 'gas' to input the
+default parameters. Type anything else to define
+them manually.
 
-Code automated to work with no user input for
-the physical state or system parameters with
-default values for a solid
+Main then asks for **timestep** and **number of steps**
+user input. If no input is given, they will be defined
+automatically as dt = 0.01 and numstep = 1000.
 
-Main asks for a base file name user input to make
-the output file names which is automated to construct 
-file names using 'output' in case of no user input
+Code automated to work with no user inputs for any
+parameters with default values for a solid.
+
+Main asks for a base file name user input to construct
+the output file names. Code is automated to use 'output'
+as file name in case of no user input.
 
 ### Format
 

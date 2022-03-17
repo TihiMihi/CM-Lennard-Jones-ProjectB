@@ -20,7 +20,7 @@ and the average radial distribution function. </h4>
 
 """
 
-# import directories
+# import libraries
 import numpy as np
 import matplotlib.pyplot as pyplot
 from particle3D import Particle3D
