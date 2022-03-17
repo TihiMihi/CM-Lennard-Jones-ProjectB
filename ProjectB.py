@@ -242,7 +242,7 @@ def MSD(particle_list, cell_size, initial_pos_list, time_list, iterator, file_ha
         # of regular time intervals
         return np.linalg.norm(msd)
 
-def RDF(N, separation_list, rho, numstep, file_handle):
+def RDF(N, cell_size, separation_list, rho, numstep, file_handle):
     """
     Method to return the radial distribution function
     as a function of particle displacement
@@ -255,6 +255,8 @@ def RDF(N, separation_list, rho, numstep, file_handle):
     Parameters
     ----------
     N : Number of particles.
+    cell_size : length of
+        simulation cell
     separation_list : list of particle
         separations overtime
     rho : density
@@ -269,12 +271,15 @@ def RDF(N, separation_list, rho, numstep, file_handle):
         rdf histogram
     
     """
+    # diagonal of cell size volume
+    l = np.linalg.norm(cell_size)
+    
     histogram_sum = 0
     
     for separation in separation_list:
         r_mod = np.linalg.norm(separation, axis = -1)
-        counts, edges = np.histogram(r_mod, bins=100, range=(0,2),\
-                                     weights=(4*np.pi*rho*N)*r_mod)
+        counts, edges = np.histogram(r_mod, bins=100, range=(0,l/2),\
+                                     weights=1/(4*np.pi*rho*N*(r_mod)**2))
         histogram_sum += counts
     
     # list of edges excluding final edge
@@ -284,7 +289,7 @@ def RDF(N, separation_list, rho, numstep, file_handle):
     
     # average radial distribution
     # with first gr value annulled
-    gr = histogram_sum[1:]/(numstep*(r**2))
+    gr = histogram_sum[1:]/(numstep)
     
     file_handle.write(f"{r} \n{gr} \n")
     
@@ -481,7 +486,7 @@ def main():
     # system using separations and output to rdf file
     rdf_file = open(f"{file_name}.rdf.dat", "w")
     rdf_file.write("Time / Radial Distribution Function\n")
-    r, gr = RDF(N, separation_list, rho, numstep, rdf_file)
+    r, gr = RDF(N, cell_size, separation_list, rho, numstep, rdf_file)
     
     
     # Close files
