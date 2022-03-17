@@ -6,6 +6,9 @@ Created on Tue Jan 25 14:15:28 2022
 
 ### Instructions
 
+Code automated to work with no user inputs for any
+parameters with default values for a solid.
+
 Main asks for physical state user input of
 particle system as a shortcut to define **number
 of particles**, **density**, and **temperature**.
@@ -20,9 +23,6 @@ them manually.
 Main then asks for **timestep** and **number of steps**
 user input. If no input is given, they will be defined
 automatically as dt = 0.01 and numstep = 1000.
-
-Code automated to work with no user inputs for any
-parameters with default values for a solid.
 
 Main asks for a base file name user input to construct
 the output file names. Code is automated to use 'output'

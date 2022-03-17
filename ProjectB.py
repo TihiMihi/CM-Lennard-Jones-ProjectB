@@ -271,14 +271,15 @@ def RDF(N, cell_size, separation_list, rho, numstep, file_handle):
         rdf histogram
     
     """
-    # diagonal of cell size volume
+    # maximum diagonal of cell size volume
+    # used as range for histogram
     l = np.linalg.norm(cell_size)
     
     histogram_sum = 0
     
     for separation in separation_list:
         r_mod = np.linalg.norm(separation, axis = -1)
-        counts, edges = np.histogram(r_mod, bins=100, range=(0,l/2),\
+        counts, edges = np.histogram(r_mod, bins=100, range=(0,l),\
                                      weights=1/(4*np.pi*rho*N*(r_mod)**2))
         histogram_sum += counts
     
@@ -316,6 +317,7 @@ def main():
     Plot total energy of the system overtime
     Plot MSD per time
     Plot RDF per distance
+    Save graphs in directory
     
     Returns
     -------
@@ -514,6 +516,7 @@ def main():
     pyplot.xlabel('Time (sigma√(m/E)') # sigma = size of the particle, m = unitary mass, E
     pyplot.ylabel('Total energy (dispersion energy E)') # E = dispersion / classical binding energy
     pyplot.plot(time_list, energy_list)
+    pyplot.savefig('Total Energy.png')
     pyplot.show()
     
     # Plot Mean Square Displacement as a function of time
@@ -521,6 +524,7 @@ def main():
     pyplot.xlabel('Time (sigma√(m/E)') # sigma, m = unitary mass, E = dispersion energy
     pyplot.ylabel('MSD (sigma)') # sigma = size of the particle
     pyplot.plot(msd_tlist, msd_list)
+    pyplot.savefig('MSD.png')
     pyplot.show()
     
     # Plot Radial Distribution Function
@@ -528,6 +532,7 @@ def main():
     pyplot.xlabel('Distance (sigma)') # sigma = size of the particle, m = unitary mass, E = dispersion energy
     pyplot.ylabel('Radial Distribution Function') # E = dispersion / classical binding energy
     pyplot.plot(r, gr)
+    pyplot.savefig('RDF.png')
     pyplot.show()
     
     return time_list, energy_list
